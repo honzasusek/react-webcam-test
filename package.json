@@ -1,0 +1,57 @@
+{
+  "name": "nextjs-boilerplate",
+  "repository": "git@github.com:honzasusek/nextjs-boilerplate.git",
+  "author": "honzasusek <honza@susek.cz>",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "heroku-postbuild": "next build",
+    "start": "next start",
+    "lint": "npm run lint:js",
+    "lint:css": "stylelint './components/**/*.js' './pages/**/*.js'",
+    "lint:eslint": "eslint --ignore-path .gitignore",
+    "lint:js": "npm run lint:eslint -- . ",
+    "lint:fix": "npm run lint:js -- --fix",
+    "lint:staged": "lint-staged",
+    "precommit": "npm run lint:staged",
+    "prettier": "prettier --write '**/*.js'"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint --fix",
+      "git add",
+      "stylelint"
+    ]
+  },
+  "engines": {
+    "node": ">=7.6"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "next": "^4.2.1",
+    "promise-polyfill": "^7.0.0",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "recompose": "^0.26.0",
+    "styled-components": "^2.4.0"
+  },
+  "devDependencies": {
+    "@strv/eslint-config-javascript": "^7.9.0",
+    "babel-eslint": "^8.1.2",
+    "babel-plugin-module-resolver": "^3.0.0",
+    "babel-plugin-styled-components": "^1.4.0",
+    "eslint": "^4.14.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-import-resolver-babel-module": "^4.0.0",
+    "eslint-plugin-import": "^2.8.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
+    "prettier": "^1.9.2",
+    "stylelint": "^8.4.0",
+    "stylelint-config-standard": "^18.0.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "stylelint-processor-styled-components": "^1.2.1"
+  }
+}
