@@ -14,7 +14,8 @@
           "components": "./components",
           "pages": "./pages",
           "static": "./static",
-          "styles": "./styles"
+          "styles": "./styles",
+          "lib": "./lib"
         }
       }
     ]
