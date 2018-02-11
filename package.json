@@ -28,6 +28,7 @@
     "node": ">=7.6"
   },
   "dependencies": {
+    "@cliener/react-webcam": "^0.3.2",
     "lodash": "^4.17.4",
     "next": "^4.2.1",
     "promise-polyfill": "^7.0.0",
