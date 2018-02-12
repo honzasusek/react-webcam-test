@@ -36,13 +36,13 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "recompose": "^0.26.0",
-    "styled-components": "^2.4.0"
+    "styled-components": "^2.4.0",
+    "babel-plugin-module-resolver": "^3.0.0",
+    "babel-plugin-styled-components": "^1.4.0"
   },
   "devDependencies": {
     "@strv/eslint-config-javascript": "^7.9.0",
     "babel-eslint": "^8.1.2",
-    "babel-plugin-module-resolver": "^3.0.0",
-    "babel-plugin-styled-components": "^1.4.0",
     "eslint": "^4.14.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-babel-module": "^4.0.0",
