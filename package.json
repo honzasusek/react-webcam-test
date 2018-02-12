@@ -6,7 +6,7 @@
     "dev": "next",
     "build": "next build",
     "heroku-postbuild": "next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "lint": "npm run lint:js",
     "lint:css": "stylelint './components/**/*.js' './pages/**/*.js'",
     "lint:eslint": "eslint --ignore-path .gitignore",
