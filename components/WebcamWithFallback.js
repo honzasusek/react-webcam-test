@@ -1,13 +1,9 @@
 import React from 'react'
 import isBrowser from 'lib/isBrowser'
-import updateState from 'lib/updateState'
-import {
-  compose,
-  withHandlers,
-  withStateHandlers,
-  setPropTypes,
-} from 'recompose'
+import hasWebcamAccess from 'lib/hasWebcamAccess'
+import { compose, withHandlers, setPropTypes } from 'recompose'
 import PropTypes from 'prop-types'
+import WebcamFallback from './WebcamFallback'
 
 let webcamInstance
 
@@ -17,22 +13,13 @@ const setRef = instance => {
 
 export default compose(
   setPropTypes({
+    autoSize: PropTypes.bool,
     capture: PropTypes.func.isRequired,
   }),
-  withStateHandlers(
-    {
-      videoWidth: 640,
-      videoHeight: 480,
-    },
-    {
-      setVideoDimensions: ({ videoWidth, videoHeight }) => (width, height) => ({
-        ...updateState('videoWidth', videoWidth, width),
-        ...updateState('videoHeight', videoHeight, height),
-      }),
-    }
-  ),
   withHandlers({
-    handleMetaDataLoad: () => () => {
+    handleMetaDataLoad: ({ autoSize }) => () => {
+      if (!autoSize) return
+
       webcamInstance.videoElement.width = webcamInstance.videoElement.videoWidth
       webcamInstance.videoElement.height =
         webcamInstance.videoElement.videoHeight
@@ -55,17 +42,8 @@ export default compose(
     },
   })
 )(({ handleButtonClick, handleInputChange, handleUserMedia, ...props }) => {
-  if (!isBrowser) return <div />
-
-  if (!navigator || !navigator.getUserMedia)
-    return (
-      <input
-        type="file"
-        capture="camera"
-        accept="image/*"
-        onChange={handleInputChange}
-      />
-    )
+  if (!isBrowser() || !hasWebcamAccess())
+    return <WebcamFallback onChange={handleInputChange} />
 
   const Webcam = require('@cliener/react-webcam').default
 
