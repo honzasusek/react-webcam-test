@@ -25,7 +25,7 @@ export default compose(
   })
 )(({ imageSrc, handleCapture }) => (
   <div>
-    <WebcamWithFallback capture={handleCapture} autoSize />
+    <WebcamWithFallback capture={handleCapture} width="640" height="480" />
     {imageSrc && <img alt="Captured" src={imageSrc} />}
   </div>
 ))

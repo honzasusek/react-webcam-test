@@ -57,6 +57,7 @@ export default compose(
 
   return [
     <Webcam
+      audio={props.audio || false} // audio=false is required by Edge
       key="webcam"
       onUserMedia={handleUserMedia}
       ref={setRef}
