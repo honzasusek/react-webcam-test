@@ -1,7 +1,7 @@
 import React from 'react'
 import isBrowser from 'lib/isBrowser'
 import hasWebcamAccess from 'lib/hasWebcamAccess'
-import { compose, withHandlers, setPropTypes } from 'recompose'
+import { compose, lifecycle, withHandlers, setPropTypes } from 'recompose'
 import PropTypes from 'prop-types'
 import WebcamFallback from './WebcamFallback'
 
@@ -17,7 +17,7 @@ export default compose(
     capture: PropTypes.func.isRequired,
   }),
   withHandlers({
-    handleMetaDataLoad: ({ autoSize }) => () => {
+    handleResize: ({ autoSize }) => () => {
       if (!autoSize) return
 
       webcamInstance.videoElement.width = webcamInstance.videoElement.videoWidth
@@ -34,11 +34,19 @@ export default compose(
         capture(window.URL.createObjectURL(e.target.files[0]))
       }
     },
-    handleUserMedia: ({ handleMetaDataLoad }) => () => {
+    handleUserMedia: ({ handleResize }) => () => {
+      window.addEventListener('resize', handleResize)
       webcamInstance.videoElement.addEventListener(
         'loadedmetadata',
-        handleMetaDataLoad
+        handleResize
       )
+    },
+  }),
+  lifecycle({
+    componentWillUnmount() {
+      const { handleResize } = this.props
+
+      window.removeEventListener('resize', handleResize)
     },
   })
 )(({ handleButtonClick, handleInputChange, handleUserMedia, ...props }) => {
