@@ -1,9 +1,16 @@
 import React from 'react'
 import updateState from 'lib/updateState'
-import { compose, withHandlers, withStateHandlers } from 'recompose'
+import { compose, lifecycle, withHandlers, withStateHandlers } from 'recompose'
 import WebcamWithFallback from 'components/WebcamWithFallback'
+import forceHttps from 'lib/forceHttps'
+import isProduction from 'lib/isProduction'
 
 export default compose(
+  lifecycle({
+    componentDidMount() {
+      if (isProduction()) forceHttps()
+    },
+  }),
   withStateHandlers(
     {
       imageSrc: null,
