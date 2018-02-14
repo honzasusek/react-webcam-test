@@ -1,9 +1,16 @@
 import React from 'react'
 import isBrowser from 'lib/isBrowser'
 import hasWebcamAccess from 'lib/hasWebcamAccess'
-import { compose, lifecycle, withHandlers, setPropTypes } from 'recompose'
+import {
+  compose,
+  lifecycle,
+  withHandlers,
+  withStateHandlers,
+  setPropTypes,
+} from 'recompose'
 import PropTypes from 'prop-types'
 import WebcamFallback from './WebcamFallback'
+import updateState from '../lib/updateState'
 
 let webcamInstance
 
@@ -16,6 +23,14 @@ export default compose(
     autoSize: PropTypes.bool,
     capture: PropTypes.func.isRequired,
   }),
+  withStateHandlers(
+    {
+      error: false,
+    },
+    {
+      setError: ({ error }) => value => updateState('error', error, value),
+    }
+  ),
   withHandlers({
     handleResize: ({ autoSize }) => () => {
       if (!autoSize) return
@@ -26,6 +41,7 @@ export default compose(
     },
   }),
   withHandlers({
+    handleError: ({ setError }) => () => setError(true),
     handleButtonClick: ({ capture }) => () => {
       capture(webcamInstance.getScreenshot())
     },
@@ -49,22 +65,32 @@ export default compose(
       window.removeEventListener('resize', handleResize)
     },
   })
-)(({ handleButtonClick, handleInputChange, handleUserMedia, ...props }) => {
-  if (!isBrowser() || !hasWebcamAccess())
-    return <WebcamFallback onChange={handleInputChange} />
+)(
+  ({
+    error,
+    handleButtonClick,
+    handleError,
+    handleInputChange,
+    handleUserMedia,
+    ...props
+  }) => {
+    if (error || !isBrowser() || !hasWebcamAccess())
+      return <WebcamFallback onChange={handleInputChange} />
 
-  const Webcam = require('@cliener/react-webcam').default
+    const Webcam = require('@cliener/react-webcam').default
 
-  return [
-    <Webcam
-      audio={props.audio || false} // audio=false is required by Edge
-      key="webcam"
-      onUserMedia={handleUserMedia}
-      ref={setRef}
-      {...props}
-    />,
-    <button key="button" onClick={handleButtonClick}>
-      Capture photo
-    </button>,
-  ]
-})
+    return [
+      <Webcam
+        audio={props.audio || false} // audio=false is required by Edge
+        key="webcam"
+        onFailure={handleError}
+        onUserMedia={handleUserMedia}
+        ref={setRef}
+        {...props}
+      />,
+      <button key="button" onClick={handleButtonClick}>
+        Capture photo
+      </button>,
+    ]
+  }
+)
